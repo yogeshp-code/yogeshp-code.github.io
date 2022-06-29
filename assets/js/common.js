@@ -448,15 +448,7 @@ $(document).ready(function() {
       Contacts form
     -------------------------------------------------------------------*/
 
-    $("#contact-form").validator().on("submit", function (event) {
-        if (event.isDefaultPrevented()) {
-            formError();
-            submitMSG(false, "Please fill in the form...");
-        } else {
-            event.preventDefault();
-           
-        }
-    });
+   
 
  
     function formSuccess(){
