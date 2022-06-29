@@ -454,32 +454,11 @@ $(document).ready(function() {
             submitMSG(false, "Please fill in the form...");
         } else {
             event.preventDefault();
-            submitForm();
+           
         }
     });
 
-    function submitForm(){
-        var name = $("#nameContact").val(),
-            email = $("#emailContact").val(),
-            message = $("#messageContact").val();
-			
-        var url = "assets/php/form-contact.php";
-		
-        $.ajax({
-            type: "POST",
-            url: url,
-            data: "name=" + name + "&email=" + email + "&message=" + message,
-            success : function(text){
-                if (text == "success"){
-                    formSuccess();
-                } else {
-                    formError();
-                    submitMSG(false,text);
-                }
-            }
-        });
-    }
-
+ 
     function formSuccess(){
         $("#contact-form")[0].reset();
         submitMSG(true, "Thanks! Your message has been sent.");
