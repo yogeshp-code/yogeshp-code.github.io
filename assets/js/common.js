@@ -453,8 +453,8 @@ $(document).ready(function() {
             formError();
             submitMSG(false, "Please fill in the form...");
         } else {
-            event.preventDefault();
-            submitForm();
+            // event.preventDefault();
+            // submitForm();
         }
     });
 
