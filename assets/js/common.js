@@ -480,6 +480,7 @@ $(document).ready(function() {
         });
     }
 
+ 
     function formSuccess(){
         $("#contact-form")[0].reset();
         submitMSG(true, "Thanks! Your message has been sent.");
