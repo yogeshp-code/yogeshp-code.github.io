@@ -1,0 +1,422 @@
+1:"$Sreact.fragment"
+2:I[7780,["177","static/chunks/app/layout-04a69574cf935adf.js"],"ThemeProvider"]
+3:I[7555,[],""]
+4:I[1295,[],""]
+5:I[6874,["874","static/chunks/874-476808868ec6108b.js","953","static/chunks/app/blog/%5Bslug%5D/page-e8ac9a7e48d571aa.js"],""]
+7:I[9665,[],"OutletBoundary"]
+a:I[9665,[],"ViewportBoundary"]
+c:I[9665,[],"MetadataBoundary"]
+e:I[6614,[],""]
+:HL["/_next/static/css/fa1a16549edb92de.css","style"]
+:HL["/_next/static/css/f055e431c58b907b.css","style"]
+6:T3ec8,<p> Picture this: You’re a DevOps engineer who just finished setting up a new ECS service. Everything looks perfect until you get that dreaded alert — someone’s trying to do something nasty in your container. Now you’re rushing to figure out what happened and how to prevent it.</p>
+<p>But what if you could be prepared? Better yet, what if you could practice detecting and responding to security threats in a controlled environment? That’s exactly what we’re building today — a security training ground right in your ECS environment!.</p>
+<h3>Why Container Security Monitoring Matters</h3>
+<p>When we deploy containers in production, a lot can happen:</p>
+<ul>
+<li>Sometimes applications start behaving strangely</li>
+<li>Resources spike unexpectedly</li>
+<li>Unusual network connections appear</li>
+<li>Files get accessed that shouldn’t be touched</li>
+</ul>
+<p>The challenge? By the time we notice these issues, it’s usually because something has already gone wrong. That’s where security monitoring comes in — it helps us catch these issues early, understand what’s happening, and respond quickly.</p>
+<h3>The Security Monitoring Challenge</h3>
+<p>Most DevOps engineers face three big challenges with container security:</p>
+<ul>
+<li>Not knowing what to monitor</li>
+<li>Not understanding security alerts when they come</li>
+<li>Not having a safe place to learn and experiment</li>
+</ul>
+<p>That’s exactly what we’re solving today! We’ll build a security monitoring lab where you can:</p>
+<ul>
+<li>See exactly what suspicious activities look like in your containers</li>
+<li>Get alerts when something fishy happens</li>
+<li>Learn how to spot common security issues before they become problems</li>
+</ul>
+<h3>Enter Falco: Your Container’s Security Camera</h3>
+<p>Think of Falco as your container’s security camera. It watches what’s happening inside your containers and tells you when something doesn’t look right. Want to know if someone’s trying to read sensitive files? Or if a container suddenly starts acting strange? Falco’s got your back.</p>
+<h3>What We’re Building</h3>
+<p>Our project does something unique — it combines a purposefully vulnerable application with Falco security monitoring in different security modes. Think of it as your personal security lab in the cloud!</p>
+<p>Project Features</p>
+<ul>
+<li>A Flask app with endpoints that simulate common attack vectors</li>
+<li>Three security modes: Training, Production, and Chaos</li>
+<li>Advanced Falco rules for attack pattern detection</li>
+<li>Real-time security event monitoring</li>
+</ul>
+<h3>Directory Structure</h3>
+<pre><code>security-training/
+├── app/
+│   ├── Dockerfile
+│   ├── app.py
+│   ├── security_utils.py
+│   └── requirements.txt
+├── falco/
+│   ├── Dockerfile
+│   ├── falco_rules.yaml
+│   └── falco.yaml (We have not keep in my example we have used default one)
+├── ecs/
+│   └── task-definition.json
+└── README.md
+</code></pre>
+<h3>1. Building the Application</h3>
+<h2>The Flask App (app/app.py)</h2>
+<pre><code>from flask import Flask, jsonify
+import subprocess
+import os
+import random
+import time
+from security_utils import execute_command, simulate_crypto_mining
+
+app = Flask(__name__)
+
+# Get security mode from environment variable
+SECURITY_MODE = os.getenv(&#39;SECURITY_MODE&#39;, &#39;PRODUCTION&#39;)
+
+def is_endpoint_enabled():
+    if SECURITY_MODE == &#39;PRODUCTION&#39;:
+        return False
+    elif SECURITY_MODE == &#39;TRAINING&#39;:
+        return True
+    elif SECURITY_MODE == &#39;CHAOS&#39;:
+        return random.choice([True, False])
+    return False
+
+@app.route(&#39;/&#39;)
+def home():
+    return jsonify({
+        &quot;status&quot;: &quot;running&quot;,
+        &quot;mode&quot;: SECURITY_MODE,
+        &quot;message&quot;: &quot;Security Training Ground Active&quot;
+    })
+
+@app.route(&#39;/exec/&lt;command&gt;&#39;)
+def command_exec(command):
+    if not is_endpoint_enabled():
+        return jsonify({&quot;error&quot;: &quot;Endpoint disabled in current mode&quot;}), 403
+    
+    result = execute_command(command)
+    return jsonify({&quot;result&quot;: result})
+
+@app.route(&#39;/file-access/&lt;path&gt;&#39;)
+def file_access(path):
+    if not is_endpoint_enabled():
+        return jsonify({&quot;error&quot;: &quot;Endpoint disabled in current mode&quot;}), 403
+    
+    try:
+        with open(path, &#39;r&#39;) as file:
+            return jsonify({&quot;content&quot;: file.read()})
+    except Exception as e:
+        return jsonify({&quot;error&quot;: str(e)}), 400
+
+@app.route(&#39;/network-scan/&lt;target&gt;&#39;)
+def network_scan(target):
+    if not is_endpoint_enabled():
+        return jsonify({&quot;error&quot;: &quot;Endpoint disabled in current mode&quot;}), 403
+    
+    try:
+        result = subprocess.check_output([&#39;ping&#39;, &#39;-c&#39;, &#39;1&#39;, target])
+        return jsonify({&quot;result&quot;: result.decode()})
+    except Exception as e:
+        return jsonify({&quot;error&quot;: str(e)}), 400
+
+@app.route(&#39;/crypto-simulate&#39;)
+def crypto_mine():
+    if not is_endpoint_enabled():
+        return jsonify({&quot;error&quot;: &quot;Endpoint disabled in current mode&quot;}), 403
+    
+    simulate_crypto_mining()
+    return jsonify({&quot;status&quot;: &quot;mining simulation started&quot;})
+
+@app.route(&#39;/privilege-escalate&#39;)
+def privilege_escalate():
+    if not is_endpoint_enabled():
+        return jsonify({&quot;error&quot;: &quot;Endpoint disabled in current mode&quot;}), 403
+    
+    try:
+        os.setuid(0)  # Attempt to set root privileges
+        return jsonify({&quot;status&quot;: &quot;privilege escalation attempted&quot;})
+    except Exception as e:
+        return jsonify({&quot;error&quot;: str(e)}), 400
+file-acce
+if __name__ == &#39;__main__&#39;:
+    app.run(host=&#39;0.0.0.0&#39;, port=5000)
+</code></pre>
+<h3>Security Utils (app/security_utils.py)</h3>
+<pre><code>import subprocess
+import time
+import threading
+
+def execute_command(command):
+    &quot;&quot;&quot;Execute a shell command and return the output&quot;&quot;&quot;
+    try:
+        result = subprocess.check_output(command.split(), stderr=subprocess.STDOUT)
+        return result.decode()
+    except subprocess.CalledProcessError as e:
+        return f&quot;Error: {e.output.decode()}&quot;
+
+def simulate_crypto_mining():
+    &quot;&quot;&quot;Simulate cryptocurrency mining behavior&quot;&quot;&quot;
+    def cpu_intensive_task():
+        while True:
+            # Simulate CPU-intensive calculations
+            [x ** 2 for x in range(10000)]
+            time.sleep(0.1)
+    
+    # Start the simulation in a background thread
+    thread = threading.Thread(target=cpu_intensive_task)
+    thread.daemon = True
+    thread.start()
+</code></pre>
+<h3>Requirements (app/requirements.txt)</h3>
+<pre><code>flask==2.0.1
+Dockerfile (app/Dockerfile)
+FROM python:3.9-slim
+
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY . .
+
+ENV SECURITY_MODE=PRODUCTION
+
+EXPOSE 5000
+CMD [&quot;python&quot;, &quot;app.py&quot;]
+</code></pre>
+<h3>2. Setting Up Falco</h3>
+<h3>Custom Rules (falco/falco_rules.yaml)</h3>
+<pre><code class="language-yaml"># Base security rules
+- rule: Sensitive File Access
+  desc: Detects access to sensitive system files
+  condition: &gt;
+    open_read and fd.name startswith /etc and
+    (fd.name in (/etc/shadow, /etc/passwd, /etc/ssh/ssh_config)) 
+  output: &quot;Sensitive file access detected [file=%fd.name user=%user.name container=%container.name]&quot;
+  priority: WARNING
+  tags: [filesystem]
+
+# Command execution detection
+- rule: Suspicious Command Execution
+  desc: Detects execution of potentially dangerous commands
+  condition: &gt;
+    spawned_process and proc.name in (sh, bash, nc, curl, wget)
+  output: &quot;Suspicious command execution [cmd=%proc.cmdline user=%user.name container=%container.name]&quot;
+  priority: WARNING
+  tags: [process]
+
+# Network scanning detection
+- rule: Network Scanning Activity
+  desc: Detects network scanning attempts
+  condition: &gt;
+    spawned_process and proc.name = ping
+  output: &quot;Network scanning detected [cmd=%proc.cmdline container=%container.name]&quot;
+  priority: WARNING
+  tags: [network]
+
+# # Crypto mining detection
+- rule: Crypto Mining Activity
+  desc: Detects potential cryptocurrency mining behavior
+  condition: &gt;
+    spawned_process and 
+    (proc.name in (minerd, cpuminer, cpuminer-multi, cpuminer-opt) or 
+    proc.cmdline contains &quot;crypto&quot; or 
+    proc.cmdline contains &quot;mining&quot; or
+    proc.cmdline contains &quot;monero&quot; or
+    proc.aname in (minerd, cpuminer, cpuminer-multi, cpuminer-opt))
+  output: &quot;Potential crypto mining activity detected [container=%container.name proc=%proc.name cmdline=%proc.cmdline]&quot;
+  priority: WARNING
+  tags: [mining]
+
+# Privilege escalation detection
+- rule: Privilege Escalation Attempt
+  desc: Detects attempts to escalate privileges
+  condition: &gt;
+    evt.type = setuid and evt.arg.uid = 0
+  output: &quot;Privilege escalation attempt detected [user=%user.name container=%container.name]&quot;
+  priority: CRITICAL
+  tags: [privilege]
+</code></pre>
+<h2>Dockerfile (falco/Dockerfile)</h2>
+<pre><code>FROM falcosecurity/falco:latest
+COPY falco_rules.yaml /etc/falco/rules.d/
+</code></pre>
+<h3>3. ECS Task Definition</h3>
+<h3>Task Definition (ecs/task-definition.json)</h3>
+<pre><code class="language-json">{
+  &quot;family&quot;: &quot;security-training&quot;,
+  &quot;containerDefinitions&quot;: [
+    {
+      &quot;name&quot;: &quot;vulnerable-app&quot;,
+      &quot;image&quot;: &quot;vulnerable-app:latest&quot;,
+      &quot;essential&quot;: true,
+      &quot;portMappings&quot;: [
+        {
+          &quot;containerPort&quot;: 5000,
+          &quot;hostPort&quot;: 5000
+        }
+      ],
+      &quot;environment&quot;: [
+        {
+          &quot;name&quot;: &quot;SECURITY_MODE&quot;,
+          &quot;value&quot;: &quot;TRAINING&quot;
+        }
+      ],
+      &quot;logConfiguration&quot;: {
+        &quot;logDriver&quot;: &quot;awslogs&quot;,
+        &quot;options&quot;: {
+          &quot;awslogs-group&quot;: &quot;/ecs/security-training&quot;,
+          &quot;awslogs-region&quot;: &quot;us-west-2&quot;,
+          &quot;awslogs-stream-prefix&quot;: &quot;app&quot;
+        }
+      }
+    },
+    {
+      &quot;name&quot;: &quot;falco-sidecar&quot;,
+      &quot;image&quot;: &quot;custom-falco:latest&quot;,
+      &quot;essential&quot;: true,
+      &quot;privileged&quot;: true,
+      &quot;logConfiguration&quot;: {
+        &quot;logDriver&quot;: &quot;awslogs&quot;,
+        &quot;options&quot;: {
+          &quot;awslogs-group&quot;: &quot;/ecs/security-training&quot;,
+          &quot;awslogs-region&quot;: &quot;us-west-2&quot;,
+          &quot;awslogs-stream-prefix&quot;: &quot;falco&quot;
+        }
+      }
+    }
+  ]
+}
+</code></pre>
+<h3>4. Building and Deploying</h3>
+<h4>Build the application:</h4>
+<pre><code># Build the vulnerable app
+cd app
+docker build -t vulnerable-app:latest .
+
+# Build Falco sidecar
+cd ../falco
+docker build -t custom-falco:latest .
+</code></pre>
+<h3>Push to ECR:</h3>
+<pre><code>
+# Replace with your ECR repository
+aws ecr get-login-password --region us-west-2 | docker login --username AWS --password-stdin YOUR_ACCOUNT.dkr.ecr.us-west-2.amazonaws.com
+
+docker tag vulnerable-app:latest YOUR_ACCOUNT.dkr.ecr.us-west-2.amazonaws.com/vulnerable-app:latest
+docker push YOUR_ACCOUNT.dkr.ecr.us-west-2.amazonaws.com/vulnerable-app:latest
+
+docker tag custom-falco:latest YOUR_ACCOUNT.dkr.ecr.us-west-2.amazonaws.com/custom-falco:latest
+docker push YOUR_ACCOUNT.dkr.ecr.us-west-2.amazonaws.com/custom-falco:latest
+</code></pre>
+<h4>Deploy to ECS:</h4>
+<pre><code>
+aws ecs register-task-definition --cli-input-json file://ecs/task-definition.json
+aws ecs create-service --cluster your-cluster --service-name security-training --task-definition security-training:1 --desired-count 1
+</code></pre>
+<h3>5. Testing the Setup</h3>
+<pre><code>
+Training Mode Tests
+# Get your service URL
+export SERVICE_URL=&lt;your-service-url&gt;
+
+# Test command execution
+curl &quot;$SERVICE_URL/exec/ls&quot;
+
+# Test file access
+curl &quot;$SERVICE_URL/file-access/etc/passwd&quot;
+# Test network scanning
+curl &quot;$SERVICE_URL/network-scan/8.8.8.8&quot;
+# Test crypto mining simulation
+curl &quot;$SERVICE_URL/crypto-simulate&quot;
+# Test privilege escalation
+curl &quot;$SERVICE_URL/privilege-escalate&quot;
+</code></pre>
+<h3>Checking Falco Alerts</h3>
+<pre><code>
+# View Falco logs
+aws logs get-log-events --log-group-name /ecs/security-training --log-stream-name falco/security-training/&lt;task-id&gt;
+</code></pre>
+<h3>Real-World Security Scenarios We Monitor</h3>
+<p>Let’s look at actual incidents that inspired our monitoring setup:</p>
+<ul>
+<li><p>The Crypto-Mining Incident
+Scenario: A compromised container suddenly shows high CPU usage
+Real Example: In 2018, Tesla’s Kubernetes cluster was hijacked for crypto mining
+What We Monitor: Unusual CPU patterns, unexpected processes, and network connections to mining pools</p>
+</li>
+<li><p>The Data Sniffer</p>
+</li>
+</ul>
+<p>Scenario: Container tries to read sensitive system files
+Real Example: Common in container escape attempts where attackers try to access host system files
+What We Monitor: Unauthorized file access attempts, especially to /etc/passwd, SSH keys, and other sensitive files</p>
+<ul>
+<li>The Network Scout</li>
+</ul>
+<p>Scenario: Container performs internal network scanning
+Real Example: Seen in multi-stage attacks where compromised containers try to find other vulnerable services
+What We Monitor: Unusual network patterns, port scanning attempts, and unexpected internal connections</p>
+<ul>
+<li>The Privilege Hunter</li>
+</ul>
+<p>Scenario: Application tries to escalate its privileges
+Real Example: CVE-2019–5736 showed how containers could be used to gain host system access
+What We Monitor: Attempts to modify permissions, gain root access, or escape container boundaries</p>
+<ul>
+<li>The Supply Chain Trojan</li>
+</ul>
+<p>Scenario: Container runs unexpected commands or downloads unknown files
+Real Example: The 2020 SolarWinds incident showed the importance of runtime monitoring
+What We Monitor: Unexpected process executions, suspicious downloads, and unusual file modifications</p>
+<h3>Security Modes Explained</h3>
+<ul>
+<li><p>TRAINING Mode
+All vulnerable endpoints enabled
+Perfect for security testing and learning
+Use this to test Falco rules and practice incident response</p>
+</li>
+<li><p>PRODUCTION Mode</p>
+</li>
+</ul>
+<p>All vulnerable endpoints disabled
+Use this to demonstrate secure configuration</p>
+<ul>
+<li>CHAOS Mode</li>
+</ul>
+<p>Endpoints randomly enabled/disabled
+Great for testing detection systems
+Simulates unpredictable attack patterns</p>
+<h3>What’s Next?</h3>
+<p>Want to level up your security game? Try these:</p>
+<ul>
+<li><p>Add more attack scenarios:
+Container escape attempts
+Data exfiltration simulations
+DNS tunneling detection</p>
+</li>
+<li><p>Enhance monitoring:</p>
+</li>
+</ul>
+<p>Set up Prometheus metrics for security events
+Create Grafana dashboards
+Implement automated response with AWS Lambda</p>
+<ul>
+<li>Improve attack pattern detection:</li>
+</ul>
+<p>Add machine learning for anomaly detection
+Implement MITRE ATT&amp;CK mapping
+Create custom correlation rules</p>
+<h3>Conclusion</h3>
+<p>You’ve just built your own security training ground in ECS! This setup lets you:</p>
+<p>Practice security monitoring in a controlled environment
+Test Falco rules against real attack patterns
+Understand how different types of attacks look at the container level
+Remember: The best way to learn security monitoring is by doing it. With this setup, you’ll see real security events happening in real-time, understand what they look like, and learn how to respond to them. Happy monitoring! 🛡️</p>
+<p>P.S.: Always run this in an isolated environment. We don’t want our security training to become a security incident!
+      </p>
+0:{"P":null,"b":"yR6KjN2MX2ujsA-7LiCtI","p":"","c":["","blog","ecs-security",""],"i":false,"f":[[["",{"children":["blog",{"children":[["slug","ecs-security","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/fa1a16549edb92de.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","title",null,{"children":"DevOps Engineer Portfolio"}],["$","meta",null,{"name":"description","content":"Professional DevOps Engineer Portfolio showcasing infrastructure automation, cloud architecture, and CI/CD expertise"}]]}],["$","body",null,{"children":["$","$L2",null,{"attribute":"class","defaultTheme":"system","enableSystem":true,"disableTransitionOnChange":true,"children":["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]}]]}]]}],{"children":["blog",["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["slug","ecs-security","d"],["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","div",null,{"className":"container py-12 md:py-16","children":[["$","div",null,{"className":"flex items-center mb-8","children":["$","$L5",null,{"href":"/blog","children":[["$","svg",null,{"ref":"$undefined","xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-arrow-left h-4 w-4","children":[["$","path","1l729n",{"d":"m12 19-7-7 7-7"}],["$","path","x3x0zl",{"d":"M19 12H5"}],"$undefined"]}],"Back to Blog"],"className":"inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 gap-2","ref":null}]}],["$","div",null,{"className":"space-y-8","children":[["$","div",null,{"children":[["$","div",null,{"className":"flex items-center gap-2 mb-4","children":[["$","div",null,{"className":"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground","children":"Security"}],["$","span",null,{"className":"text-sm text-muted-foreground","children":"January 19, 2025"}]]}],["$","h1",null,{"className":"text-3xl font-bold tracking-tighter md:text-4xl mb-4","children":"ECS Security in Action: A Lab for DevOps Enthusiasts"}],["$","p",null,{"className":"text-muted-foreground max-w-[800px] text-lg","children":"Learn how to build a security training ground in ECS using Falco."}],["$","div",null,{"className":"flex items-center gap-2 mt-4","children":[["$","div",null,{"className":"h-8 w-8 rounded-full bg-muted"}],["$","span",null,{"className":"text-sm font-medium","children":"Yogesh Patil"}]]}]]}],["$","div",null,{"className":"aspect-video w-full overflow-hidden rounded-lg border","children":["$","img",null,{"src":"/security.png","alt":"ECS Security in Action: A Lab for DevOps Enthusiasts","className":"object-cover w-full h-full"}]}],["$","div",null,{"className":"prose prose-gray max-w-none dark:prose-invert","children":["$","div",null,{"className":"prose prose-gray max-w-none dark:prose-invert","dangerouslySetInnerHTML":{"__html":"$6"}}]}]]}]]}],"$undefined",[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/f055e431c58b907b.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","$L7",null,{"children":["$L8","$L9",null]}]]}],{},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,["$","$1","DS3plG0bw_DMwGQjkODLW",{"children":[["$","$La",null,{"children":"$Lb"}],null]}],["$","$Lc",null,{"children":"$Ld"}]]}],false]],"m":"$undefined","G":["$e","$undefined"],"s":false,"S":true}
+b:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+8:null
+9:null
+d:[["$","meta","0",{"name":"generator","content":"v0.dev"}]]
