@@ -1,0 +1,168 @@
+1:"$Sreact.fragment"
+2:I[7780,["177","static/chunks/app/layout-04a69574cf935adf.js"],"ThemeProvider"]
+3:I[7555,[],""]
+4:I[1295,[],""]
+5:I[6874,["874","static/chunks/874-476808868ec6108b.js","419","static/chunks/app/projects/%5Bslug%5D/page-53e61c0d3bf7ad9e.js"],""]
+7:I[9665,[],"OutletBoundary"]
+a:I[9665,[],"ViewportBoundary"]
+c:I[9665,[],"MetadataBoundary"]
+e:I[6614,[],""]
+:HL["/_next/static/css/be649f9ad220c19e.css","style"]
+:HL["/_next/static/css/f055e431c58b907b.css","style"]
+6:T128a,<h1>MyVCS - A Minimal Git-like Version Control System</h1>
+<h2>Overview</h2>
+<p>MyVCS is a minimal version control system implemented in Python to help understand the internal workings of Git. This project was created &quot;the hard way&quot; by implementing core Git concepts from scratch, without relying on existing Git libraries.</p>
+<p><a href="https://github.com/yogeshp-code/MyVCS">Source Code</a></p>
+<h2>Features</h2>
+<ul>
+<li>Basic Git-like commands: <code>init</code>, <code>add</code>, <code>commit</code>, <code>log</code>, <code>diff</code>, <code>checkout</code>, <code>branch</code>, <code>tag</code>, <code>status</code></li>
+<li>SHA-1 based object storage (blobs, trees, commits)</li>
+<li>Branching and tagging support</li>
+<li>Staging area (index)</li>
+<li>Working directory tracking</li>
+<li>Commit history visualization</li>
+</ul>
+<h2>How It Works</h2>
+<p>MyVCS mimics Git&#39;s internal architecture with these key components:</p>
+<ol>
+<li><p><strong>Object Database</strong>:</p>
+<ul>
+<li>Blobs: Store file contents</li>
+<li>Trees: Represent directory structures</li>
+<li>Commits: Snapshots with metadata</li>
+</ul>
+</li>
+<li><p><strong>References</strong>:</p>
+<ul>
+<li>Branches (under <code>refs/heads/</code>)</li>
+<li>Tags (under <code>refs/tags/</code>)</li>
+<li>HEAD pointer</li>
+</ul>
+</li>
+<li><p><strong>Index</strong>:</p>
+<ul>
+<li>Tracks staged changes before commit</li>
+</ul>
+</li>
+</ol>
+<h2>Installation</h2>
+<ol>
+<li>Clone this repository</li>
+<li>Ensure you have Python 3 installed</li>
+<li>Make the script executable:<pre><code class="language-bash">chmod +x myvcs.py
+</code></pre>
+</li>
+</ol>
+<h2>Usage</h2>
+<p>Basic command structure:</p>
+<pre><code class="language-bash">./myvcs.py &lt;command&gt; [options]
+</code></pre>
+<h3>Available Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+<th>Example Usage</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>init</code></td>
+<td>Initialize a new repository</td>
+<td><code>./myvcs.py init</code></td>
+</tr>
+<tr>
+<td><code>add</code></td>
+<td>Add files to staging area</td>
+<td><code>./myvcs.py add file1 file2</code></td>
+</tr>
+<tr>
+<td><code>commit</code></td>
+<td>Commit staged changes</td>
+<td><code>./myvcs.py commit -m &quot;msg&quot;</code></td>
+</tr>
+<tr>
+<td><code>log</code></td>
+<td>Show commit history</td>
+<td><code>./myvcs.py log</code></td>
+</tr>
+<tr>
+<td><code>diff</code></td>
+<td>Show changes between commits</td>
+<td><code>./myvcs.py diff sha1 sha2</code></td>
+</tr>
+<tr>
+<td><code>checkout</code></td>
+<td>Switch branches or restore files</td>
+<td><code>./myvcs.py checkout branch</code></td>
+</tr>
+<tr>
+<td><code>branch</code></td>
+<td>Create a new branch</td>
+<td><code>./myvcs.py branch new-branch</code></td>
+</tr>
+<tr>
+<td><code>tag</code></td>
+<td>Create a new tag</td>
+<td><code>./myvcs.py tag v1.0</code></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Show working tree status</td>
+<td><code>./myvcs.py status</code></td>
+</tr>
+</tbody></table>
+<h2>Implementation Details</h2>
+<h3>Core Concepts Implemented</h3>
+<ol>
+<li><p><strong>Object Storage</strong>:</p>
+<ul>
+<li>Files are stored as blobs with SHA-1 hashes</li>
+<li>Directories are represented as tree objects</li>
+<li>Commits point to tree objects and contain metadata</li>
+</ul>
+</li>
+<li><p><strong>References</strong>:</p>
+<ul>
+<li>Branches and tags are lightweight pointers to commits</li>
+<li>HEAD tracks the current branch or commit</li>
+</ul>
+</li>
+<li><p><strong>Staging Area</strong>:</p>
+<ul>
+<li>Tracks changes before they&#39;re committed</li>
+<li>Allows selective commits</li>
+</ul>
+</li>
+</ol>
+<h3>Limitations</h3>
+<p>This is a learning project with several limitations compared to real Git:</p>
+<ul>
+<li>No network operations (fetch/push/pull)</li>
+<li>Simplified merge conflict handling</li>
+<li>Basic error handling</li>
+<li>Limited performance optimizations</li>
+</ul>
+<h2>Learning Resources</h2>
+<p>This project was inspired by:</p>
+<ul>
+<li><a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects">Git Internals - Git Objects</a></li>
+<li><a href="https://shop.jcoglan.com/building-git/">Building Git</a></li>
+<li><a href="https://wyag.thb.lt/">Write yourself a Git!</a></li>
+</ul>
+<h2>License</h2>
+<p>This project is open source and available under the <a href="LICENSE">MIT License</a>.</p>
+<h2>Contributing</h2>
+<p>While this is primarily a learning project, contributions that improve educational value are welcome. Please open issues or pull requests for:</p>
+<ul>
+<li>Bug fixes</li>
+<li>Documentation improvements</li>
+<li>Clearer implementation examples</li>
+</ul>
+<h2>Acknowledgments</h2>
+<p>Special thanks to the Git community for creating such an elegant version control system that inspires projects like this.</p>
+0:{"P":null,"b":"hEVMoGZO0RJ3i0P1pbXBb","p":"","c":["","projects","myvcs",""],"i":false,"f":[[["",{"children":["projects",{"children":[["slug","myvcs","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/be649f9ad220c19e.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","title",null,{"children":"DevOps Engineer Portfolio"}],["$","meta",null,{"name":"description","content":"Professional DevOps Engineer Portfolio showcasing infrastructure automation, cloud architecture, and CI/CD expertise"}]]}],["$","body",null,{"className":"","children":["$","$L2",null,{"attribute":"class","defaultTheme":"dark","enableSystem":true,"disableTransitionOnChange":true,"children":["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]}]]}]]}],{"children":["projects",["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["slug","myvcs","d"],["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","div",null,{"className":"container py-12 md:py-16","children":[["$","div",null,{"className":"flex items-center mb-8","children":["$","$L5",null,{"href":"/projects","children":[["$","svg",null,{"ref":"$undefined","xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-arrow-left h-4 w-4","children":[["$","path","1l729n",{"d":"m12 19-7-7 7-7"}],["$","path","x3x0zl",{"d":"M19 12H5"}],"$undefined"]}],"Back to Projects"],"className":"inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 gap-2","ref":null}]}],["$","div",null,{"className":"space-y-8","children":[["$","div",null,{"children":[["$","h1",null,{"className":"text-3xl font-bold tracking-tighter md:text-4xl mb-4","children":"MyVCS"}],["$","div",null,{"className":"flex flex-wrap gap-2 mb-4","children":[["$","div","GIT",{"className":"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80","children":"GIT"}],["$","div","VCS",{"className":"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80","children":"VCS"}]]}],["$","p",null,{"className":"text-muted-foreground max-w-[800px] text-lg","children":"A version control system to understand the inner workings of Git."}]]}],["$","div",null,{"className":"aspect-video w-full overflow-hidden rounded-lg border","children":["$","img",null,{"src":"/myvcs.png","alt":"MyVCS","className":"object-cover w-full h-full"}]}],["$","div",null,{"className":"prose prose-gray max-w-none dark:prose-invert","children":["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$6"}}]}]]}]]}],"$undefined",[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/f055e431c58b907b.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","$L7",null,{"children":["$L8","$L9",null]}]]}],{},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,["$","$1","1NFm0RvIo44B9VPj-McTh",{"children":[["$","$La",null,{"children":"$Lb"}],null]}],["$","$Lc",null,{"children":"$Ld"}]]}],false]],"m":"$undefined","G":["$e","$undefined"],"s":false,"S":true}
+b:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+8:null
+9:null
+d:[["$","meta","0",{"name":"generator","content":"v0.dev"}]]

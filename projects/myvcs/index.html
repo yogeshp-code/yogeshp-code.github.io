@@ -1,0 +1,153 @@
+<!DOCTYPE html><html lang="en"><head><meta charSet="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="preload" as="image" href="/myvcs.png"/><link rel="stylesheet" href="/_next/static/css/be649f9ad220c19e.css" data-precedence="next"/><link rel="stylesheet" href="/_next/static/css/f055e431c58b907b.css" data-precedence="next"/><link rel="preload" as="script" fetchPriority="low" href="/_next/static/chunks/webpack-4b61ff2d4f25fa5e.js"/><script src="/_next/static/chunks/4bd1b696-4b0f7518a463c96c.js" async=""></script><script src="/_next/static/chunks/684-b8b017b181c13627.js" async=""></script><script src="/_next/static/chunks/main-app-48dded4652dd45b8.js" async=""></script><script src="/_next/static/chunks/app/layout-04a69574cf935adf.js" async=""></script><script src="/_next/static/chunks/874-476808868ec6108b.js" async=""></script><script src="/_next/static/chunks/app/projects/%5Bslug%5D/page-53e61c0d3bf7ad9e.js" async=""></script><title>DevOps Engineer Portfolio</title><meta name="description" content="Professional DevOps Engineer Portfolio showcasing infrastructure automation, cloud architecture, and CI/CD expertise"/><meta name="generator" content="v0.dev"/><script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" noModule=""></script></head><body class=""><script>((e,t,r,n,o,a,i,u)=>{let s=document.documentElement,l=["light","dark"];function c(t){var r;(Array.isArray(e)?e:[e]).forEach(e=>{let r="class"===e,n=r&&a?o.map(e=>a[e]||e):o;r?(s.classList.remove(...n),s.classList.add(a&&a[t]?a[t]:t)):s.setAttribute(e,t)}),r=t,u&&l.includes(r)&&(s.style.colorScheme=r)}if(n)c(n);else try{let e=localStorage.getItem(t)||r,n=i&&"system"===e?window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light":e;c(n)}catch(e){}})("class","theme","dark",null,["light","dark"],null,true,true)</script><div class="container py-12 md:py-16"><div class="flex items-center mb-8"><a class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 gap-2" href="/projects/"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left h-4 w-4"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>Back to Projects</a></div><div class="space-y-8"><div><h1 class="text-3xl font-bold tracking-tighter md:text-4xl mb-4">MyVCS</h1><div class="flex flex-wrap gap-2 mb-4"><div class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">GIT</div><div class="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">VCS</div></div><p class="text-muted-foreground max-w-[800px] text-lg">A version control system to understand the inner workings of Git.</p></div><div class="aspect-video w-full overflow-hidden rounded-lg border"><img src="/myvcs.png" alt="MyVCS" class="object-cover w-full h-full"/></div><div class="prose prose-gray max-w-none dark:prose-invert"><div><h1>MyVCS - A Minimal Git-like Version Control System</h1>
+<h2>Overview</h2>
+<p>MyVCS is a minimal version control system implemented in Python to help understand the internal workings of Git. This project was created &quot;the hard way&quot; by implementing core Git concepts from scratch, without relying on existing Git libraries.</p>
+<p><a href="https://github.com/yogeshp-code/MyVCS">Source Code</a></p>
+<h2>Features</h2>
+<ul>
+<li>Basic Git-like commands: <code>init</code>, <code>add</code>, <code>commit</code>, <code>log</code>, <code>diff</code>, <code>checkout</code>, <code>branch</code>, <code>tag</code>, <code>status</code></li>
+<li>SHA-1 based object storage (blobs, trees, commits)</li>
+<li>Branching and tagging support</li>
+<li>Staging area (index)</li>
+<li>Working directory tracking</li>
+<li>Commit history visualization</li>
+</ul>
+<h2>How It Works</h2>
+<p>MyVCS mimics Git&#39;s internal architecture with these key components:</p>
+<ol>
+<li><p><strong>Object Database</strong>:</p>
+<ul>
+<li>Blobs: Store file contents</li>
+<li>Trees: Represent directory structures</li>
+<li>Commits: Snapshots with metadata</li>
+</ul>
+</li>
+<li><p><strong>References</strong>:</p>
+<ul>
+<li>Branches (under <code>refs/heads/</code>)</li>
+<li>Tags (under <code>refs/tags/</code>)</li>
+<li>HEAD pointer</li>
+</ul>
+</li>
+<li><p><strong>Index</strong>:</p>
+<ul>
+<li>Tracks staged changes before commit</li>
+</ul>
+</li>
+</ol>
+<h2>Installation</h2>
+<ol>
+<li>Clone this repository</li>
+<li>Ensure you have Python 3 installed</li>
+<li>Make the script executable:<pre><code class="language-bash">chmod +x myvcs.py
+</code></pre>
+</li>
+</ol>
+<h2>Usage</h2>
+<p>Basic command structure:</p>
+<pre><code class="language-bash">./myvcs.py &lt;command&gt; [options]
+</code></pre>
+<h3>Available Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+<th>Example Usage</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>init</code></td>
+<td>Initialize a new repository</td>
+<td><code>./myvcs.py init</code></td>
+</tr>
+<tr>
+<td><code>add</code></td>
+<td>Add files to staging area</td>
+<td><code>./myvcs.py add file1 file2</code></td>
+</tr>
+<tr>
+<td><code>commit</code></td>
+<td>Commit staged changes</td>
+<td><code>./myvcs.py commit -m &quot;msg&quot;</code></td>
+</tr>
+<tr>
+<td><code>log</code></td>
+<td>Show commit history</td>
+<td><code>./myvcs.py log</code></td>
+</tr>
+<tr>
+<td><code>diff</code></td>
+<td>Show changes between commits</td>
+<td><code>./myvcs.py diff sha1 sha2</code></td>
+</tr>
+<tr>
+<td><code>checkout</code></td>
+<td>Switch branches or restore files</td>
+<td><code>./myvcs.py checkout branch</code></td>
+</tr>
+<tr>
+<td><code>branch</code></td>
+<td>Create a new branch</td>
+<td><code>./myvcs.py branch new-branch</code></td>
+</tr>
+<tr>
+<td><code>tag</code></td>
+<td>Create a new tag</td>
+<td><code>./myvcs.py tag v1.0</code></td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Show working tree status</td>
+<td><code>./myvcs.py status</code></td>
+</tr>
+</tbody></table>
+<h2>Implementation Details</h2>
+<h3>Core Concepts Implemented</h3>
+<ol>
+<li><p><strong>Object Storage</strong>:</p>
+<ul>
+<li>Files are stored as blobs with SHA-1 hashes</li>
+<li>Directories are represented as tree objects</li>
+<li>Commits point to tree objects and contain metadata</li>
+</ul>
+</li>
+<li><p><strong>References</strong>:</p>
+<ul>
+<li>Branches and tags are lightweight pointers to commits</li>
+<li>HEAD tracks the current branch or commit</li>
+</ul>
+</li>
+<li><p><strong>Staging Area</strong>:</p>
+<ul>
+<li>Tracks changes before they&#39;re committed</li>
+<li>Allows selective commits</li>
+</ul>
+</li>
+</ol>
+<h3>Limitations</h3>
+<p>This is a learning project with several limitations compared to real Git:</p>
+<ul>
+<li>No network operations (fetch/push/pull)</li>
+<li>Simplified merge conflict handling</li>
+<li>Basic error handling</li>
+<li>Limited performance optimizations</li>
+</ul>
+<h2>Learning Resources</h2>
+<p>This project was inspired by:</p>
+<ul>
+<li><a href="https://git-scm.com/book/en/v2/Git-Internals-Git-Objects">Git Internals - Git Objects</a></li>
+<li><a href="https://shop.jcoglan.com/building-git/">Building Git</a></li>
+<li><a href="https://wyag.thb.lt/">Write yourself a Git!</a></li>
+</ul>
+<h2>License</h2>
+<p>This project is open source and available under the <a href="LICENSE">MIT License</a>.</p>
+<h2>Contributing</h2>
+<p>While this is primarily a learning project, contributions that improve educational value are welcome. Please open issues or pull requests for:</p>
+<ul>
+<li>Bug fixes</li>
+<li>Documentation improvements</li>
+<li>Clearer implementation examples</li>
+</ul>
+<h2>Acknowledgments</h2>
+<p>Special thanks to the Git community for creating such an elegant version control system that inspires projects like this.</p>
+</div></div></div></div><script src="/_next/static/chunks/webpack-4b61ff2d4f25fa5e.js" async=""></script><script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,"1:\"$Sreact.fragment\"\n2:I[7780,[\"177\",\"static/chunks/app/layout-04a69574cf935adf.js\"],\"ThemeProvider\"]\n3:I[7555,[],\"\"]\n4:I[1295,[],\"\"]\n5:I[6874,[\"874\",\"static/chunks/874-476808868ec6108b.js\",\"419\",\"static/chunks/app/projects/%5Bslug%5D/page-53e61c0d3bf7ad9e.js\"],\"\"]\n7:I[9665,[],\"OutletBoundary\"]\na:I[9665,[],\"ViewportBoundary\"]\nc:I[9665,[],\"MetadataBoundary\"]\ne:I[6614,[],\"\"]\n:HL[\"/_next/static/css/be649f9ad220c19e.css\",\"style\"]\n:HL[\"/_next/static/css/f055e431c58b907b.css\",\"style\"]\n6:T128a,"])</script><script>self.__next_f.push([1,"\u003ch1\u003eMyVCS - A Minimal Git-like Version Control System\u003c/h1\u003e\n\u003ch2\u003eOverview\u003c/h2\u003e\n\u003cp\u003eMyVCS is a minimal version control system implemented in Python to help understand the internal workings of Git. This project was created \u0026quot;the hard way\u0026quot; by implementing core Git concepts from scratch, without relying on existing Git libraries.\u003c/p\u003e\n\u003cp\u003e\u003ca href=\"https://github.com/yogeshp-code/MyVCS\"\u003eSource Code\u003c/a\u003e\u003c/p\u003e\n\u003ch2\u003eFeatures\u003c/h2\u003e\n\u003cul\u003e\n\u003cli\u003eBasic Git-like commands: \u003ccode\u003einit\u003c/code\u003e, \u003ccode\u003eadd\u003c/code\u003e, \u003ccode\u003ecommit\u003c/code\u003e, \u003ccode\u003elog\u003c/code\u003e, \u003ccode\u003ediff\u003c/code\u003e, \u003ccode\u003echeckout\u003c/code\u003e, \u003ccode\u003ebranch\u003c/code\u003e, \u003ccode\u003etag\u003c/code\u003e, \u003ccode\u003estatus\u003c/code\u003e\u003c/li\u003e\n\u003cli\u003eSHA-1 based object storage (blobs, trees, commits)\u003c/li\u003e\n\u003cli\u003eBranching and tagging support\u003c/li\u003e\n\u003cli\u003eStaging area (index)\u003c/li\u003e\n\u003cli\u003eWorking directory tracking\u003c/li\u003e\n\u003cli\u003eCommit history visualization\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2\u003eHow It Works\u003c/h2\u003e\n\u003cp\u003eMyVCS mimics Git\u0026#39;s internal architecture with these key components:\u003c/p\u003e\n\u003col\u003e\n\u003cli\u003e\u003cp\u003e\u003cstrong\u003eObject Database\u003c/strong\u003e:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eBlobs: Store file contents\u003c/li\u003e\n\u003cli\u003eTrees: Represent directory structures\u003c/li\u003e\n\u003cli\u003eCommits: Snapshots with metadata\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003e\u003cstrong\u003eReferences\u003c/strong\u003e:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eBranches (under \u003ccode\u003erefs/heads/\u003c/code\u003e)\u003c/li\u003e\n\u003cli\u003eTags (under \u003ccode\u003erefs/tags/\u003c/code\u003e)\u003c/li\u003e\n\u003cli\u003eHEAD pointer\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003e\u003cstrong\u003eIndex\u003c/strong\u003e:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eTracks staged changes before commit\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch2\u003eInstallation\u003c/h2\u003e\n\u003col\u003e\n\u003cli\u003eClone this repository\u003c/li\u003e\n\u003cli\u003eEnsure you have Python 3 installed\u003c/li\u003e\n\u003cli\u003eMake the script executable:\u003cpre\u003e\u003ccode class=\"language-bash\"\u003echmod +x myvcs.py\n\u003c/code\u003e\u003c/pre\u003e\n\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch2\u003eUsage\u003c/h2\u003e\n\u003cp\u003eBasic command structure:\u003c/p\u003e\n\u003cpre\u003e\u003ccode class=\"language-bash\"\u003e./myvcs.py \u0026lt;command\u0026gt; [options]\n\u003c/code\u003e\u003c/pre\u003e\n\u003ch3\u003eAvailable Commands\u003c/h3\u003e\n\u003ctable\u003e\n\u003cthead\u003e\n\u003ctr\u003e\n\u003cth\u003eCommand\u003c/th\u003e\n\u003cth\u003eDescription\u003c/th\u003e\n\u003cth\u003eExample Usage\u003c/th\u003e\n\u003c/tr\u003e\n\u003c/thead\u003e\n\u003ctbody\u003e\u003ctr\u003e\n\u003ctd\u003e\u003ccode\u003einit\u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eInitialize a new repository\u003c/td\u003e\n\u003ctd\u003e\u003ccode\u003e./myvcs.py init\u003c/code\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003ccode\u003eadd\u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eAdd files to staging area\u003c/td\u003e\n\u003ctd\u003e\u003ccode\u003e./myvcs.py add file1 file2\u003c/code\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003ccode\u003ecommit\u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eCommit staged changes\u003c/td\u003e\n\u003ctd\u003e\u003ccode\u003e./myvcs.py commit -m \u0026quot;msg\u0026quot;\u003c/code\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003ccode\u003elog\u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eShow commit history\u003c/td\u003e\n\u003ctd\u003e\u003ccode\u003e./myvcs.py log\u003c/code\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003ccode\u003ediff\u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eShow changes between commits\u003c/td\u003e\n\u003ctd\u003e\u003ccode\u003e./myvcs.py diff sha1 sha2\u003c/code\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003ccode\u003echeckout\u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eSwitch branches or restore files\u003c/td\u003e\n\u003ctd\u003e\u003ccode\u003e./myvcs.py checkout branch\u003c/code\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003ccode\u003ebranch\u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eCreate a new branch\u003c/td\u003e\n\u003ctd\u003e\u003ccode\u003e./myvcs.py branch new-branch\u003c/code\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003ccode\u003etag\u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eCreate a new tag\u003c/td\u003e\n\u003ctd\u003e\u003ccode\u003e./myvcs.py tag v1.0\u003c/code\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003ctr\u003e\n\u003ctd\u003e\u003ccode\u003estatus\u003c/code\u003e\u003c/td\u003e\n\u003ctd\u003eShow working tree status\u003c/td\u003e\n\u003ctd\u003e\u003ccode\u003e./myvcs.py status\u003c/code\u003e\u003c/td\u003e\n\u003c/tr\u003e\n\u003c/tbody\u003e\u003c/table\u003e\n\u003ch2\u003eImplementation Details\u003c/h2\u003e\n\u003ch3\u003eCore Concepts Implemented\u003c/h3\u003e\n\u003col\u003e\n\u003cli\u003e\u003cp\u003e\u003cstrong\u003eObject Storage\u003c/strong\u003e:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eFiles are stored as blobs with SHA-1 hashes\u003c/li\u003e\n\u003cli\u003eDirectories are represented as tree objects\u003c/li\u003e\n\u003cli\u003eCommits point to tree objects and contain metadata\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003e\u003cstrong\u003eReferences\u003c/strong\u003e:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eBranches and tags are lightweight pointers to commits\u003c/li\u003e\n\u003cli\u003eHEAD tracks the current branch or commit\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003cli\u003e\u003cp\u003e\u003cstrong\u003eStaging Area\u003c/strong\u003e:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eTracks changes before they\u0026#39;re committed\u003c/li\u003e\n\u003cli\u003eAllows selective commits\u003c/li\u003e\n\u003c/ul\u003e\n\u003c/li\u003e\n\u003c/ol\u003e\n\u003ch3\u003eLimitations\u003c/h3\u003e\n\u003cp\u003eThis is a learning project with several limitations compared to real Git:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eNo network operations (fetch/push/pull)\u003c/li\u003e\n\u003cli\u003eSimplified merge conflict handling\u003c/li\u003e\n\u003cli\u003eBasic error handling\u003c/li\u003e\n\u003cli\u003eLimited performance optimizations\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2\u003eLearning Resources\u003c/h2\u003e\n\u003cp\u003eThis project was inspired by:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003e\u003ca href=\"https://git-scm.com/book/en/v2/Git-Internals-Git-Objects\"\u003eGit Internals - Git Objects\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"https://shop.jcoglan.com/building-git/\"\u003eBuilding Git\u003c/a\u003e\u003c/li\u003e\n\u003cli\u003e\u003ca href=\"https://wyag.thb.lt/\"\u003eWrite yourself a Git!\u003c/a\u003e\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2\u003eLicense\u003c/h2\u003e\n\u003cp\u003eThis project is open source and available under the \u003ca href=\"LICENSE\"\u003eMIT License\u003c/a\u003e.\u003c/p\u003e\n\u003ch2\u003eContributing\u003c/h2\u003e\n\u003cp\u003eWhile this is primarily a learning project, contributions that improve educational value are welcome. Please open issues or pull requests for:\u003c/p\u003e\n\u003cul\u003e\n\u003cli\u003eBug fixes\u003c/li\u003e\n\u003cli\u003eDocumentation improvements\u003c/li\u003e\n\u003cli\u003eClearer implementation examples\u003c/li\u003e\n\u003c/ul\u003e\n\u003ch2\u003eAcknowledgments\u003c/h2\u003e\n\u003cp\u003eSpecial thanks to the Git community for creating such an elegant version control system that inspires projects like this.\u003c/p\u003e\n"])</script><script>self.__next_f.push([1,"0:{\"P\":null,\"b\":\"hEVMoGZO0RJ3i0P1pbXBb\",\"p\":\"\",\"c\":[\"\",\"projects\",\"myvcs\",\"\"],\"i\":false,\"f\":[[[\"\",{\"children\":[\"projects\",{\"children\":[[\"slug\",\"myvcs\",\"d\"],{\"children\":[\"__PAGE__\",{}]}]}]},\"$undefined\",\"$undefined\",true],[\"\",[\"$\",\"$1\",\"c\",{\"children\":[[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/be649f9ad220c19e.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]],[\"$\",\"html\",null,{\"lang\":\"en\",\"suppressHydrationWarning\":true,\"children\":[[\"$\",\"head\",null,{\"children\":[[\"$\",\"title\",null,{\"children\":\"DevOps Engineer Portfolio\"}],[\"$\",\"meta\",null,{\"name\":\"description\",\"content\":\"Professional DevOps Engineer Portfolio showcasing infrastructure automation, cloud architecture, and CI/CD expertise\"}]]}],[\"$\",\"body\",null,{\"className\":\"\",\"children\":[\"$\",\"$L2\",null,{\"attribute\":\"class\",\"defaultTheme\":\"dark\",\"enableSystem\":true,\"disableTransitionOnChange\":true,\"children\":[\"$\",\"$L3\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L4\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":[[[\"$\",\"title\",null,{\"children\":\"404: This page could not be found.\"}],[\"$\",\"div\",null,{\"style\":{\"fontFamily\":\"system-ui,\\\"Segoe UI\\\",Roboto,Helvetica,Arial,sans-serif,\\\"Apple Color Emoji\\\",\\\"Segoe UI Emoji\\\"\",\"height\":\"100vh\",\"textAlign\":\"center\",\"display\":\"flex\",\"flexDirection\":\"column\",\"alignItems\":\"center\",\"justifyContent\":\"center\"},\"children\":[\"$\",\"div\",null,{\"children\":[[\"$\",\"style\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\"}}],[\"$\",\"h1\",null,{\"className\":\"next-error-h1\",\"style\":{\"display\":\"inline-block\",\"margin\":\"0 20px 0 0\",\"padding\":\"0 23px 0 0\",\"fontSize\":24,\"fontWeight\":500,\"verticalAlign\":\"top\",\"lineHeight\":\"49px\"},\"children\":404}],[\"$\",\"div\",null,{\"style\":{\"display\":\"inline-block\"},\"children\":[\"$\",\"h2\",null,{\"style\":{\"fontSize\":14,\"fontWeight\":400,\"lineHeight\":\"49px\",\"margin\":0},\"children\":\"This page could not be found.\"}]}]]}]}]],[]],\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]}]}]]}]]}],{\"children\":[\"projects\",[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L3\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L4\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[[\"slug\",\"myvcs\",\"d\"],[\"$\",\"$1\",\"c\",{\"children\":[null,[\"$\",\"$L3\",null,{\"parallelRouterKey\":\"children\",\"error\":\"$undefined\",\"errorStyles\":\"$undefined\",\"errorScripts\":\"$undefined\",\"template\":[\"$\",\"$L4\",null,{}],\"templateStyles\":\"$undefined\",\"templateScripts\":\"$undefined\",\"notFound\":\"$undefined\",\"forbidden\":\"$undefined\",\"unauthorized\":\"$undefined\"}]]}],{\"children\":[\"__PAGE__\",[\"$\",\"$1\",\"c\",{\"children\":[[\"$\",\"div\",null,{\"className\":\"container py-12 md:py-16\",\"children\":[[\"$\",\"div\",null,{\"className\":\"flex items-center mb-8\",\"children\":[\"$\",\"$L5\",null,{\"href\":\"/projects\",\"children\":[[\"$\",\"svg\",null,{\"ref\":\"$undefined\",\"xmlns\":\"http://www.w3.org/2000/svg\",\"width\":24,\"height\":24,\"viewBox\":\"0 0 24 24\",\"fill\":\"none\",\"stroke\":\"currentColor\",\"strokeWidth\":2,\"strokeLinecap\":\"round\",\"strokeLinejoin\":\"round\",\"className\":\"lucide lucide-arrow-left h-4 w-4\",\"children\":[[\"$\",\"path\",\"1l729n\",{\"d\":\"m12 19-7-7 7-7\"}],[\"$\",\"path\",\"x3x0zl\",{\"d\":\"M19 12H5\"}],\"$undefined\"]}],\"Back to Projects\"],\"className\":\"inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [\u0026_svg]:pointer-events-none [\u0026_svg]:size-4 [\u0026_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 gap-2\",\"ref\":null}]}],[\"$\",\"div\",null,{\"className\":\"space-y-8\",\"children\":[[\"$\",\"div\",null,{\"children\":[[\"$\",\"h1\",null,{\"className\":\"text-3xl font-bold tracking-tighter md:text-4xl mb-4\",\"children\":\"MyVCS\"}],[\"$\",\"div\",null,{\"className\":\"flex flex-wrap gap-2 mb-4\",\"children\":[[\"$\",\"div\",\"GIT\",{\"className\":\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80\",\"children\":\"GIT\"}],[\"$\",\"div\",\"VCS\",{\"className\":\"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80\",\"children\":\"VCS\"}]]}],[\"$\",\"p\",null,{\"className\":\"text-muted-foreground max-w-[800px] text-lg\",\"children\":\"A version control system to understand the inner workings of Git.\"}]]}],[\"$\",\"div\",null,{\"className\":\"aspect-video w-full overflow-hidden rounded-lg border\",\"children\":[\"$\",\"img\",null,{\"src\":\"/myvcs.png\",\"alt\":\"MyVCS\",\"className\":\"object-cover w-full h-full\"}]}],[\"$\",\"div\",null,{\"className\":\"prose prose-gray max-w-none dark:prose-invert\",\"children\":[\"$\",\"div\",null,{\"dangerouslySetInnerHTML\":{\"__html\":\"$6\"}}]}]]}]]}],\"$undefined\",[[\"$\",\"link\",\"0\",{\"rel\":\"stylesheet\",\"href\":\"/_next/static/css/f055e431c58b907b.css\",\"precedence\":\"next\",\"crossOrigin\":\"$undefined\",\"nonce\":\"$undefined\"}]],[\"$\",\"$L7\",null,{\"children\":[\"$L8\",\"$L9\",null]}]]}],{},null,false]},null,false]},null,false]},null,false],[\"$\",\"$1\",\"h\",{\"children\":[null,[\"$\",\"$1\",\"1NFm0RvIo44B9VPj-McTh\",{\"children\":[[\"$\",\"$La\",null,{\"children\":\"$Lb\"}],null]}],[\"$\",\"$Lc\",null,{\"children\":\"$Ld\"}]]}],false]],\"m\":\"$undefined\",\"G\":[\"$e\",\"$undefined\"],\"s\":false,\"S\":true}\n"])</script><script>self.__next_f.push([1,"b:[[\"$\",\"meta\",\"0\",{\"charSet\":\"utf-8\"}],[\"$\",\"meta\",\"1\",{\"name\":\"viewport\",\"content\":\"width=device-width, initial-scale=1\"}]]\n8:null\n"])</script><script>self.__next_f.push([1,"9:null\nd:[[\"$\",\"meta\",\"0\",{\"name\":\"generator\",\"content\":\"v0.dev\"}]]\n"])</script></body></html>

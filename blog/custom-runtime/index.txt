@@ -1,0 +1,421 @@
+1:"$Sreact.fragment"
+2:I[7780,["177","static/chunks/app/layout-04a69574cf935adf.js"],"ThemeProvider"]
+3:I[7555,[],""]
+4:I[1295,[],""]
+5:I[6874,["874","static/chunks/874-476808868ec6108b.js","953","static/chunks/app/blog/%5Bslug%5D/page-8c2bb8fa7cf641db.js"],""]
+7:I[9665,[],"OutletBoundary"]
+a:I[9665,[],"ViewportBoundary"]
+c:I[9665,[],"MetadataBoundary"]
+e:I[6614,[],""]
+:HL["/_next/static/css/be649f9ad220c19e.css","style"]
+:HL["/_next/static/css/f055e431c58b907b.css","style"]
+6:T4134,<p>When it comes to AWS Lambda, developers often stick to the well-trodden paths of Node.js, Python, or Java. But as a DevOps engineer, you know those paths can get a little crowded. Sometimes, you need a trailblazing solution — a custom runtime.</p>
+<p>Today, we&#39;re diving into the fascinating world of AWS Lambda custom runtimes using Rust and C, two low-level performance powerhouses. Why these languages? Because sometimes, we need precision, efficiency, and a little &quot;look what I just optimized&quot; flex.</p>
+<p>And yes, we&#39;ll also answer the age-old battle cry: &quot;Why not just use EC2?&quot;</p>
+<h2>Why Custom Runtimes (and Not EC2)?</h2>
+<p>Imagine a conversation between Dev and DevOps:</p>
+<p><strong>Dev:</strong> &quot;Can&#39;t we just deploy this on EC2?&quot;<br><strong>DevOps:</strong> &quot;Sure, if you want to spend your weekends patching instances and scaling servers.&quot;</p>
+<p>Lambda custom runtimes are like the work smarter, not harder mantra of serverless computing. Here&#39;s why they shine:</p>
+<h3>1. No Infrastructure Hassles</h3>
+<p>With EC2, you&#39;re managing instances. With containers, you&#39;re managing orchestration. With Lambda, you&#39;re managing… well, nothing. AWS does all the heavy lifting — patching, scaling, and uptime are handled for you.</p>
+<h3>2. Support for Legacy Code</h3>
+<p>Have old C-based libraries that you don&#39;t want to rewrite? Custom runtimes let you use them directly without the overhead of running a VM or container. Perfect for tasks like daily processing jobs or one-off operations.</p>
+<h3>3. Event-Driven Simplicity</h3>
+<p>Custom runtimes let you trigger legacy or specialized code when needed without always-on infrastructure. Ideal for workflows that process occasional large files or periodic reports.</p>
+<h3>4. Tight Execution Time and Cost Control</h3>
+<p>In the Lambda world, you pay for execution time and memory usage. Optimized custom runtimes ensure you only pay for what you use. They&#39;re a great fit for performance-critical tasks where every millisecond and megabyte counts.</p>
+<p><em>(These are my thoughts; yours may differ. Feel free to share your perspective!)</em></p>
+<h2>Why Rust and C?</h2>
+<p>If DevOps were a movie, Rust would be the brilliant hacker who secures the system, and C would be the old-school action hero who gets things done with brute force.</p>
+<h3>Rust: The Memory-Safe Maverick</h3>
+<ul>
+<li><strong>Concurrency without Fear:</strong> Rust prevents race conditions like a pro.</li>
+<li><strong>Blazing Fast:</strong> Designed for high-performance, low-latency workloads.</li>
+</ul>
+<h3>C: The Veteran Performer</h3>
+<ul>
+<li><strong>No-nonsense Control:</strong> You decide exactly how memory is allocated and released.</li>
+<li><strong>Proven Track Record:</strong> If there&#39;s an optimization challenge, C has been solving it since the &#39;70s.</li>
+</ul>
+<h3>The Dream Team</h3>
+<p>Rust handles your application logic, while C powers those heavy computations. Together, they deliver speed, efficiency, and that satisfying feeling of squeezing every last drop out of your CPU.</p>
+<h2>Use Cases for Custom Runtimes with Rust and C</h2>
+<p>Still wondering when to go all-in on custom runtimes? Here&#39;s a quick cheat sheet:</p>
+<ul>
+<li><strong>Real-Time Data Processing:</strong> Processing high-frequency sensor or financial data? Rust&#39;s concurrency model and C&#39;s speed make it seamless.</li>
+<li><strong>Edge Computing:</strong> Deploying Lambda at the edge? Rust and C reduce resource usage, making them ideal for IoT and edge workloads.</li>
+<li><strong>Legacy Code Execution:</strong> Have critical C libraries you can&#39;t rewrite? Custom runtimes let you run them as-is, triggered by Lambda events.</li>
+<li><strong>Performance-Driven APIs:</strong> Need to handle millions of requests per second? Rust and C keep your Lambda snappy and your costs low.</li>
+<li><strong>Heavy-Duty Math:</strong> Building scientific models or crunching AI data? Optimize those calculations like a pro.</li>
+</ul>
+<h2>Building a Custom Runtime with Rust and C: Step-by-Step Guide</h2>
+<h3>Folder Structure Before You Begin</h3>
+<p>Here&#39;s the folder structure we&#39;ll create for this project. Follow this layout to avoid confusion as you progress through the steps:</p>
+<pre><code>rust_runtime/
+├── bootstrap                # Entry point for AWS Lambda
+├── src/
+│   ├── main.rs          # Rust application logic
+│   ├── complax_math.c   # C code for custom functionality
+└── Cargo.toml           # Rust project configuration
+</code></pre>
+<h3>Prerequisites Installation (Step 0)</h3>
+<p>First, let&#39;s install all the tools we need:</p>
+<ol>
+<li><strong>Install Rust:</strong></li>
+</ol>
+<pre><code class="language-bash"># For Windows, download from https://rustup.rs/
+# For Linux/Mac:
+curl --proto &#39;=https&#39; --tlsv1.2 -sSf https://sh.rustup.rs | sh
+source $HOME/.cargo/env
+</code></pre>
+<ol start="2">
+<li><strong>Install C Compiler:</strong></li>
+</ol>
+<ul>
+<li>Windows: Install MinGW-w64 from <a href="http://mingw-w64.org/">http://mingw-w64.org/</a></li>
+<li>Linux: <code>sudo apt-get install build-essential</code></li>
+<li>Mac: <code>xcode-select --install</code></li>
+</ul>
+<ol start="3">
+<li><strong>Install AWS CLI:</strong></li>
+</ol>
+<ul>
+<li>Download from: <a href="https://aws.amazon.com/cli/">https://aws.amazon.com/cli/</a></li>
+<li>Verify installation: <code>aws --version</code></li>
+</ul>
+<ol start="4">
+<li><strong>Install Docker:</strong></li>
+</ol>
+<ul>
+<li>Download from: <a href="https://www.docker.com/products/docker-desktop">https://www.docker.com/products/docker-desktop</a></li>
+<li>Verify installation: <code>docker --version</code></li>
+</ul>
+<h3>Project Setup (Step 1)</h3>
+<ol>
+<li><strong>Create Project Directory:</strong></li>
+</ol>
+<pre><code class="language-bash">cargo new rust_lambda
+cd rust_lambda
+</code></pre>
+<ol start="2">
+<li><strong>Create Project Structure:</strong></li>
+</ol>
+<pre><code class="language-bash">mkdir src
+touch src/main.rs
+touch src/complex_math.c
+touch build.rs
+</code></pre>
+<ol start="3">
+<li><strong>Set Up Dependencies:</strong> Create/update <code>Cargo.toml</code>:</li>
+</ol>
+<pre><code class="language-toml">[package]
+name = &quot;rust_lambda&quot;
+version = &quot;0.1.0&quot;
+edition = &quot;2021&quot;
+
+[dependencies]
+lambda_runtime = &quot;0.7&quot;
+tokio = { version = &quot;1&quot;, features = [&quot;macros&quot;] }
+serde = { version = &quot;1.0&quot;, features = [&quot;derive&quot;] }
+serde_json = &quot;1.0&quot;
+
+[build-dependencies]
+cc = &quot;1.0&quot;
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+</code></pre>
+<h3>Adding Code (Step 2)</h3>
+<ol>
+<li><strong>Create C Implementation (<code>complex_math.c</code>):</strong></li>
+</ol>
+<pre><code class="language-c">// complex_math.c
+#include &lt;math.h&gt;
+
+// Fibonacci calculation in C
+unsigned long long fibonacci_c(int n) {
+    if (n &lt;= 1) return n;
+    
+    unsigned long long prev = 0;
+    unsigned long long curr = 1;
+    
+    for (int i = 2; i &lt;= n; i++) {
+        unsigned long long next = prev + curr;
+        prev = curr;
+        curr = next;
+    }
+    return curr;
+}
+
+// Matrix multiplication in C
+void matrix_multiply_c(const double* a, const double* b, double* result, int size) {
+    for (int i = 0; i &lt; size; i++) {
+        for (int j = 0; j &lt; size; j++) {
+            double sum = 0.0;
+            for (int k = 0; k &lt; size; k++) {
+                sum += a[i * size + k] * b[k * size + j];
+            }
+            result[i * size + j] = sum;
+        }
+    }
+}
+
+// Prime number check
+int is_prime_c(int num) {
+    if (num &lt;= 1) return 0;
+    if (num &lt;= 3) return 1;
+    if (num % 2 == 0 || num % 3 == 0) return 0;
+
+    for (int i = 5; i * i &lt;= num; i += 6) {
+        if (num % i == 0 || num % (i + 2) == 0) return 0;
+    }
+    return 1;
+}
+</code></pre>
+<ol start="2">
+<li><strong>Create Rust Implementation (<code>src/main.rs</code>):</strong></li>
+</ol>
+<pre><code class="language-rust">use lambda_runtime::{service_fn, Error, LambdaEvent};
+use serde::{Deserialize, Serialize};
+use serde_json::{json, Value};
+use std::time::Instant;
+
+// FFI declarations for C functions
+extern &quot;C&quot; {
+    fn fibonacci_c(n: i32) -&gt; u64;
+    fn matrix_multiply_c(a: *const f64, b: *const f64, result: *mut f64, size: i32);
+    fn is_prime_c(num: i32) -&gt; i32;
+}
+
+#[derive(Deserialize)]
+struct Request {
+    operation: String,
+    parameters: Value,
+}
+
+#[derive(Serialize)]
+struct Response {
+    result: Value,
+    execution_time_ms: f64,
+    operation: String,
+}
+
+async fn main_handler(event: LambdaEvent&lt;Request&gt;) -&gt; Result&lt;Value, Error&gt; {
+    let start_time = Instant::now();
+    let (request, _context) = event.into_parts();
+    
+    let result = match request.operation.as_str() {
+        &quot;fibonacci&quot; =&gt; {
+            let n: i32 = request.parameters.get(&quot;n&quot;)
+                .and_then(|v| v.as_i64())
+                .map(|v| v as i32)
+                .unwrap_or(10);
+            
+            unsafe {
+                let fib = fibonacci_c(n);
+                json!({ &quot;fibonacci&quot;: fib })
+            }
+        },
+        &quot;matrix_multiply&quot; =&gt; {
+            let size = 3;
+            let matrix_a = vec![1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0];
+            let matrix_b = vec![9.0, 8.0, 7.0, 6.0, 5.0, 4.0, 3.0, 2.0, 1.0];
+            let mut result = vec![0.0; size * size];
+            
+            unsafe {
+                matrix_multiply_c(
+                    matrix_a.as_ptr(),
+                    matrix_b.as_ptr(),
+                    result.as_mut_ptr(),
+                    size as i32
+                );
+            }
+            
+            json!({
+                &quot;matrix_result&quot;: result.chunks(size)
+                    .map(|chunk| chunk.to_vec())
+                    .collect::&lt;Vec&lt;_&gt;&gt;()
+            })
+        },
+        &quot;prime_check&quot; =&gt; {
+            let numbers: Vec&lt;i32&gt; = request.parameters.get(&quot;numbers&quot;)
+                .and_then(|v| v.as_array())
+                .map(|arr| arr.iter()
+                    .filter_map(|v| v.as_i64().map(|n| n as i32))
+                    .collect())
+                .unwrap_or_else(|| vec![2, 3, 5, 7, 11, 13, 17, 19]);
+                
+            let prime_results: Vec&lt;(i32, bool)&gt; = numbers.iter()
+                .map(|&amp;n| {
+                    let is_prime = unsafe { is_prime_c(n) == 1 };
+                    (n, is_prime)
+                })
+                .collect();
+                
+            json!({ &quot;prime_results&quot;: prime_results })
+        },
+        _ =&gt; json!({ &quot;error&quot;: &quot;Unsupported operation&quot; })
+    };
+    
+    let response = Response {
+        result,
+        execution_time_ms: start_time.elapsed().as_secs_f64() * 1000.0,
+        operation: request.operation,
+    };
+    
+    Ok(json!(response))
+}
+
+#[tokio::main]
+async fn main() -&gt; Result&lt;(), Error&gt; {
+    let func = service_fn(main_handler);
+    lambda_runtime::run(func).await?;
+    Ok(())
+}
+</code></pre>
+<ol start="3">
+<li><strong>Create Build Script (<code>build.rs</code>):</strong></li>
+</ol>
+<pre><code class="language-rust">fn main() {
+    cc::Build::new()
+        .file(&quot;src/complex_math.c&quot;)
+        .compile(&quot;complex_math&quot;);
+}
+</code></pre>
+<h3>Building and Packaging for Lambda (Step 3)</h3>
+<ol>
+<li><strong>Build the Project:</strong></li>
+</ol>
+<pre><code class="language-bash">sudo apt-get install musl-tools
+rustup target add x86_64-unknown-linux-musl
+cd src
+# you are in rust_example/src folder
+
+gcc -c complex_math.c -o complex_math.o
+cargo build --release --target x86_64-unknown-linux-musl
+</code></pre>
+<ol start="2">
+<li><strong>Package Everything:</strong></li>
+</ol>
+<pre><code class="language-bash">cp target/x86_64-unknown-linux-musl/release/rust_runtime bootstrap
+
+# Make bootstrap executable
+chmod +x bootstrap
+
+# Create deployment package
+zip lambda.zip bootstrap
+</code></pre>
+<h3>Deploying to AWS (Step 4)</h3>
+<ol>
+<li><strong>Create IAM Role:</strong></li>
+</ol>
+<pre><code class="language-bash"># Create trust policy
+echo &#39;{
+  &quot;Version&quot;: &quot;2012-10-17&quot;,
+  &quot;Statement&quot;: [{
+    &quot;Action&quot;: &quot;sts:AssumeRole&quot;,
+    &quot;Effect&quot;: &quot;Allow&quot;,
+    &quot;Principal&quot;: {
+      &quot;Service&quot;: &quot;lambda.amazonaws.com&quot;
+    }
+  }]
+}&#39; &gt; trust-policy.json
+
+# Create role
+aws iam create-role \
+    --role-name rust-lambda-role \
+    --assume-role-policy-document file://trust-policy.json
+
+# Attach basic execution policy
+aws iam attach-role-policy \
+    --role-name rust-lambda-role \
+    --policy-arn arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+</code></pre>
+<ol start="2">
+<li><strong>Deploy Function:</strong></li>
+</ol>
+<pre><code class="language-bash"># Upload to S3 (optional)
+aws s3 cp lambda.zip s3://your-bucket/
+
+# Create function
+aws lambda create-function \
+    --function-name rust-c-arithmetic \
+    --runtime provided.al2 \
+    --role &lt;ROLE-ARN&gt; \
+    --handler bootstrap \
+    --zip-file fileb://lambda.zip \
+    --memory-size 128 \
+    --timeout 30
+</code></pre>
+<h3>Testing the Function (Step 5)</h3>
+<ol>
+<li><strong>Test Fibonacci:</strong></li>
+</ol>
+<pre><code class="language-bash">aws lambda invoke \
+    --function-name rust-c-arithmetic \
+    --payload &#39;{&quot;operation&quot;:&quot;fibonacci&quot;,&quot;parameters&quot;:{&quot;n&quot;:10}}&#39; \
+    response.json
+</code></pre>
+<ol start="2">
+<li><strong>Test Matrix Multiplication:</strong></li>
+</ol>
+<pre><code class="language-bash">aws lambda invoke \
+    --function-name rust-c-arithmetic \
+    --payload &#39;{&quot;operation&quot;:&quot;matrix_multiply&quot;,&quot;parameters&quot;:{}}&#39; \
+    response.json
+</code></pre>
+<ol start="3">
+<li><strong>Test Prime Check:</strong></li>
+</ol>
+<pre><code class="language-bash">aws lambda invoke \
+    --function-name rust-c-arithmetic \
+    --payload &#39;{&quot;operation&quot;:&quot;prime_check&quot;,&quot;parameters&quot;:{&quot;numbers&quot;:[2,3,5,7,11]}}&#39; \
+    response.json
+</code></pre>
+<h2>Troubleshooting Tips</h2>
+<h3>Build Issues:</h3>
+<ul>
+<li>Ensure all dependencies are installed</li>
+<li>Check C compiler is in PATH</li>
+<li>Verify Rust toolchain is up to date: <code>rustup update</code></li>
+</ul>
+<h3>Deployment Issues:</h3>
+<ul>
+<li>Check IAM role permissions</li>
+<li>Verify ZIP contains all required files</li>
+<li>Check Lambda logs in CloudWatch</li>
+</ul>
+<h3>Runtime Issues:</h3>
+<ul>
+<li>Monitor memory usage in CloudWatch</li>
+<li>Check timeout settings</li>
+<li>Verify input payload format</li>
+</ul>
+<h2>Challenges and Debugging Tips</h2>
+<h3>1. Runtime API Nuances</h3>
+<p>Ensure your bootstrap script handles the runtime API correctly. Debugging logs can help identify issues.</p>
+<h3>2. Cold Starts</h3>
+<p>Use Rust&#39;s optimized binaries and strip unused symbols to reduce startup time.</p>
+<h3>3. Memory Management</h3>
+<p>Be cautious with C&#39;s manual memory allocation to avoid leaks.</p>
+<h2>The Dev vs. DevOps Takeaway</h2>
+<p>In a world where developers dream of simplicity and DevOps engineers strive for efficiency, Lambda custom runtimes are the ultimate middle ground. They let you build cutting-edge solutions without managing infrastructure. And with Rust and C in the mix, you get the perfect combination of safety and speed.</p>
+<p>So next time someone says, &quot;Why not just use EC2?&quot; you&#39;ll have the perfect response: &quot;Because I like my weekends, and I like my code optimized.&quot;</p>
+<p>Go ahead — build, deploy, and let the performance speak for itself.</p>
+<h2>Resources for Further Learning</h2>
+<ul>
+<li><a href="https://docs.aws.amazon.com/lambda/latest/dg/runtimes-api.html">AWS Lambda Runtime Interface</a></li>
+<li><a href="https://github.com/awslabs/aws-lambda-rust-runtime">Rust and AWS Lambda</a></li>
+</ul>
+<hr>
+<p><strong>Disclaimer:</strong> No production environments were harmed during the writing of this post, though some dev environments may have been mildly inconvenienced.</p>
+<p>I&#39;d love to hear your thoughts! Have you tried custom runtimes? Are you team Rust, team C, or team &quot;I&#39;ll stick with my JavaScript, thank you very much&quot;? Feel free to share your ideas or suggestions with me!</p>
+<h2>Final Words</h2>
+<p>So, there you have it! A fully functional, tested, and locally optimized Rust-based Lambda function. Now, excuse me while I go brag about this build to my DevOps team.</p>
+0:{"P":null,"b":"hEVMoGZO0RJ3i0P1pbXBb","p":"","c":["","blog","custom-runtime",""],"i":false,"f":[[["",{"children":["blog",{"children":[["slug","custom-runtime","d"],{"children":["__PAGE__",{}]}]}]},"$undefined","$undefined",true],["",["$","$1","c",{"children":[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/be649f9ad220c19e.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","html",null,{"lang":"en","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","title",null,{"children":"DevOps Engineer Portfolio"}],["$","meta",null,{"name":"description","content":"Professional DevOps Engineer Portfolio showcasing infrastructure automation, cloud architecture, and CI/CD expertise"}]]}],["$","body",null,{"className":"","children":["$","$L2",null,{"attribute":"class","defaultTheme":"dark","enableSystem":true,"disableTransitionOnChange":true,"children":["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":[[["$","title",null,{"children":"404: This page could not be found."}],["$","div",null,{"style":{"fontFamily":"system-ui,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif,\"Apple Color Emoji\",\"Segoe UI Emoji\"","height":"100vh","textAlign":"center","display":"flex","flexDirection":"column","alignItems":"center","justifyContent":"center"},"children":["$","div",null,{"children":[["$","style",null,{"dangerouslySetInnerHTML":{"__html":"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}"}}],["$","h1",null,{"className":"next-error-h1","style":{"display":"inline-block","margin":"0 20px 0 0","padding":"0 23px 0 0","fontSize":24,"fontWeight":500,"verticalAlign":"top","lineHeight":"49px"},"children":404}],["$","div",null,{"style":{"display":"inline-block"},"children":["$","h2",null,{"style":{"fontSize":14,"fontWeight":400,"lineHeight":"49px","margin":0},"children":"This page could not be found."}]}]]}]}]],[]],"forbidden":"$undefined","unauthorized":"$undefined"}]}]}]]}]]}],{"children":["blog",["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":[["slug","custom-runtime","d"],["$","$1","c",{"children":[null,["$","$L3",null,{"parallelRouterKey":"children","error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L4",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","forbidden":"$undefined","unauthorized":"$undefined"}]]}],{"children":["__PAGE__",["$","$1","c",{"children":[["$","div",null,{"className":"container py-12 md:py-16","children":[["$","div",null,{"className":"flex items-center mb-8","children":["$","$L5",null,{"href":"/blog","children":[["$","svg",null,{"ref":"$undefined","xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-arrow-left h-4 w-4","children":[["$","path","1l729n",{"d":"m12 19-7-7 7-7"}],["$","path","x3x0zl",{"d":"M19 12H5"}],"$undefined"]}],"Back to Blog"],"className":"inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 gap-2","ref":null}]}],["$","div",null,{"className":"space-y-8","children":[["$","div",null,{"children":[["$","div",null,{"className":"flex items-center gap-2 mb-4","children":[["$","div",null,{"className":"inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 text-foreground","children":"AWS Lambda"}],["$","span",null,{"className":"text-sm text-muted-foreground","children":"January 12, 2025"}]]}],["$","h1",null,{"className":"text-3xl font-bold tracking-tighter md:text-4xl mb-4","children":"Rust and C Walk Into a Lambda: Custom Runtimes for the Performance-Hungry DevOps Engineer"}],["$","p",null,{"className":"text-muted-foreground max-w-[800px] text-lg","children":"Because AWS Lambda isn't just a service - it's a platform waiting to be mastered!"}],["$","div",null,{"className":"flex items-center gap-2 mt-4","children":[["$","svg",null,{"stroke":"currentColor","fill":"currentColor","strokeWidth":"0","viewBox":"0 0 1024 1024","children":["$undefined",[["$","path","0",{"d":"M858.5 763.6a374 374 0 0 0-80.6-119.5 375.63 375.63 0 0 0-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 0 0-80.6 119.5A371.7 371.7 0 0 0 136 901.8a8 8 0 0 0 8 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 0 0 8-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z","children":[]}]]],"className":"$undefined","style":{"color":"$undefined"},"height":"1em","width":"1em","xmlns":"http://www.w3.org/2000/svg"}],["$","span",null,{"className":"text-sm font-medium","children":"Yogesh Patil"}]]}]]}],["$","div",null,{"className":"aspect-video w-full overflow-hidden rounded-lg border","children":["$","img",null,{"src":"/custom-runtime.png","alt":"Rust and C Walk Into a Lambda: Custom Runtimes for the Performance-Hungry DevOps Engineer","className":"object-cover w-full h-full"}]}],["$","div",null,{"className":"prose prose-gray max-w-none dark:prose-invert dark-","children":["$","div",null,{"dangerouslySetInnerHTML":{"__html":"$6"}}]}]]}],["$","div",null,{"className":"flex items-center mb-8","children":["$","$L5",null,{"href":"/blog","children":[["$","svg",null,{"ref":"$undefined","xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-arrow-left h-4 w-4","children":[["$","path","1l729n",{"d":"m12 19-7-7 7-7"}],["$","path","x3x0zl",{"d":"M19 12H5"}],"$undefined"]}],"Back to Blog"],"className":"inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-9 rounded-md px-3 gap-2","ref":null}]}]]}],"$undefined",[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/f055e431c58b907b.css","precedence":"next","crossOrigin":"$undefined","nonce":"$undefined"}]],["$","$L7",null,{"children":["$L8","$L9",null]}]]}],{},null,false]},null,false]},null,false]},null,false],["$","$1","h",{"children":[null,["$","$1","cakI-T-FLvkqTwZELD19K",{"children":[["$","$La",null,{"children":"$Lb"}],null]}],["$","$Lc",null,{"children":"$Ld"}]]}],false]],"m":"$undefined","G":["$e","$undefined"],"s":false,"S":true}
+b:[["$","meta","0",{"charSet":"utf-8"}],["$","meta","1",{"name":"viewport","content":"width=device-width, initial-scale=1"}]]
+8:null
+9:null
+d:[["$","meta","0",{"name":"generator","content":"v0.dev"}]]
